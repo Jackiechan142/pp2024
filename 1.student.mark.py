@@ -1,4 +1,7 @@
 # Add number of Student
+from operator import truediv
+from re import T
+
 
 def input_numberStudent():
     n = int(input("Give me number of Student you want to add: "))
@@ -30,52 +33,89 @@ def input_course(number):
      return course
 
 # create mark table for each coure
-def crearte_marktable(number):
-     idstudent = input("ID: ")
-     namestudent = input("Name: ")
-     resultstudent = input("Mark: ")
+def crearte_marktable(number,id, name, mark):
      markstudent ={
-          "ID ": idstudent,
-          "Name ": namestudent,
-          "Mark": resultstudent
+          "ID ": id,
+          "Name ": name,
+          "Mark": mark
      }
      return markstudent
 
+# input mark for each student in each coures
+def input_mark_each_course(number,student,course):
+     table = []
+     table.append(course[number])
+     k = int(input("The number of student you want to add in this class: "))
+     print(student)
+     for i in range(1,k+1):
+          q = input("ID of student you want to add: ")
+          count= 0
+          for j in range(len(student)):
+               if (q== student[j].get("ID")):
+                    a = student[j].get("ID")
+                    b = student[j].get("Name")
+                    c = float(input("Mark of this Student: "))
+                    per = crearte_marktable(i,a,b,c)
+                    table.append(per)
+                    break
+               else:
+                    count= count+1
+               if (count == len(student)):
+                    print("This ID is not found.")
+                    break
+          
+     return table
+     
 
 
 def main():
-    n = input_numberStudent()
     Students =[]
     Coures = []
-    Table_mark_coures = []
-    for i in range(n):
-          person= input_infro(i)
-          Students.append(person)
-    for i in range(n):
-         print(Students[i].get("ID"))
-    m = input_numberofcoures()
-    for i in range(m):
-         listcourse = input_course(i)
-         Coures.append(listcourse)
-    for i in range(m):
-         print(Coures[i])
-    l = input("ID of course you want to add mark: ")
-    count =0
-    for i in range(m):
-         if (Coures[i].get('ID')==l):
-              Table_mark_coures.append(Coures[i])
-              k= int(input("The number in this class you want to add: "))
-              for j in range(1,k+1):
-                   personmark = crearte_marktable(j)
-                   Table_mark_coures.append(personmark)
-         else: 
-              count = count+1     
-                   
-    if (count == m):
-         print("This class not found.")     
-    print(Table_mark_coures)
-                   
-    
+    Cou =[]
+    while (True):
+       print("1. Add information of Student.")
+       print("2. Add information of Course. ")
+       print("3. Show the information of all the Student.")
+       print("4. Show the information of all Course.")
+       print("5. Add the mark in Course.")
+       print("6. Show mark of student in all Course.")
+       print("0. Exit")
+       choose = input("Please choose: ")
+       match choose:
+         case '1':
+              n = input_numberStudent()
+              for i in range(n):
+                person= input_infro(i)
+                Students.append(person)
+         case '2':
+               m = input_numberofcoures()
+               for i in range(m):
+                   listcourse = input_course(i)
+                   Coures.append(listcourse)
+         case '3':
+              for i in range(len(Students)):
+                   print(Students[i])
+         case '4':
+              for i in range(len(Coures)):
+                   print(Coures[i])
+         case '5':
+               l = input("ID of course you want to add mark: ")
+               count =0
+               for i in range(m):
+                    if (Coures[i].get('ID')==l):
+                        makrcour = input_mark_each_course(i,Students,Coures)
+                        Cou.append(makrcour)
+                    else: 
+                        count = count+1      
+               if (count == m):
+                    print("This class not found.")     
+         case '6':
+              for i in range(len(Cou)):
+                   print(Cou[i])    
+         case '0':
+                 break
+
+
 
 
           
