@@ -1,8 +1,4 @@
 
-
-
-
-
 # Add number of Student
 
 def input_numberStudent():
@@ -44,34 +40,48 @@ def crearte_marktable(number,id, name, mark):
      return markstudent
 
 # input mark for each student in each course.
-def input_mark_each_course(student):
+def  input_mark_each_course(student,mark,number,studentmark):
      table = []
      k = int(input("The number of student you want to add in this class: "))
      print(student)
-     for i in range(1,k+1):
+     for i in range(0,k):
         t = True  
         while (t):
            q = input("ID of student you want to add: ")
            count= 0
            for j in range(len(student)):
-               if (q== student[j].get("ID")):
+               if (q == student[j].get("ID")):
                     a = student[j].get("ID")
                     b = student[j].get("Name")
                     c = float(input("Mark of this Student: "))
+                    d = mark[number].get("ID")
+                    e = mark[number].get("Name")
+                    f= c
                     per = crearte_marktable(i,a,b,c)
                     table.append(per)
+                    tab= copy_mark(j,d,e,f)
+                    marktable =[]
+                    marktable.append(tab)
+                    studentmark[j][len(studentmark[j])] = marktable
                     t =False
                     break
                else:
                     count= count+1
                if (count == len(student)):
                     print("This ID is not found, please try again.")
-                    
-     return table
+     mark[number][len(mark[number])] = table
+     
      
 # Copy mark in each course to return each student learned.
-# def copy_mark(markcourse):
-#     table = []
+def copy_mark(number,id,name,mark):
+    table ={
+        "ID of cousre": id,
+        "Name od cousre":name,
+        "Mark": mark
+    }
+    return table
+
+
 
 
 def clear():
@@ -95,6 +105,7 @@ def main():
        print("5. Add the mark in Course.")
        print("6. Show mark of student in all Course.")
        print("7. Remove sutdent.")
+       print("8. Show mark of each Student.")
        print("0. Exit")
        choose = input("Please choose: ")
      
@@ -140,30 +151,29 @@ def main():
          case '5':
                clear()
                while (len(Coures) == 0):
-                print("You haven't enterd the Course, please add the Course.")
-                m = input_numberofcoures()
-                for i in range(m):
-                    listcourse = input_course(i)
-                    Coures.append(listcourse)
-                    mark.append(listcourse)
-               t= True
+                    print("You haven't enterd the Course, please add the Course.")
+                    m = input_numberofcoures()
+                    for i in range(m):
+                        listcourse = input_course(i)
+                        Coures.append(listcourse)
+                        mark.append(listcourse)
                for i in range(len(Coures)):
                    print(Coures[i])
+               t= True
                while (t):
                    l = input("ID of course you want to add mark: ")
                    count =0
                    for i in range(len(Coures)):
-                     if (Coures[i].get('ID')==l):
+                     if (Coures[i].get('ID')== l):
                         while (len(Students) == 0):
                             print("You haven't add stduent, please add student.")
                             n = input_numberStudent()
-                            for i in range(n):
-                                  person= input_infro(i)
+                            for k in range(n):
+                                  person= input_infro(k)
                                   Students.append(person)
                                   studentmark.append(person)
-                        makrcour = input_mark_each_course(Students)
-                        mark[i][len(mark[i])] = makrcour
-                        t= False
+                        input_mark_each_course(Students,mark,i,studentmark)
+                        t = False
                         break
                      else: 
                         count = count+1      
@@ -173,6 +183,8 @@ def main():
          case '6':
               clear()
               if (len(Coures) != 0):
+               for i in range(len(Coures)):
+                   print(Coures[i])
                g = input("ID of Course you want to see mark: ")
                for i in range(len(mark)):
                    if (mark[i].get("ID") == g):
@@ -196,16 +208,20 @@ def main():
              else: 
                  print("You haven't add the Student yet.")    
              exit()  
-     #     case  '8':
-     #           clear()
+         case  '8':
+               clear()
+               if (len(Coures) != 0):
+                   for i in  range(len(Students)):
+                       print(Students[i])
+                   h = input("ID of Student you want to see mark: ")
+                   for i in range(len(studentmark)):
+                      if (studentmark[i].get("ID") == h):
+                        if (len(studentmark[i]) != 1):                     
+                          print(studentmark[i])   
+               exit() 
 
          case '0':
                  break
-
-
-
-
-          
 
 main()
 
