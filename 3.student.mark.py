@@ -141,13 +141,14 @@ def clear():
 def exit():
     input("\nPress Enter to exit ...")
     clear()
+
 def main():
     stud = np.array([]) 
     Cour = np.array([])
     while(True):
-        print(1, 5,"1. Add information of Student.")
-        print(2,5,"2. Add information of Course. ")
-        print(3,5,"3. Show the information of all the Student.")
+        print("1. Add information of Student.")
+        print("2. Add information of Course. ")
+        print("3. Show the information of all the Student.")
         print("4. Show the information of all Course.")
         print("5. Add the mark in Course.")
         print("6. Show mark of student in each Course.")
