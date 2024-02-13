@@ -1,0 +1,44 @@
+import function as fc
+from domain import Crouse_class as cc
+import numpy as np
+class Student:
+    def __init__(self,id, name, Dob,):
+         self.id = id
+         self.name = name
+         self.Dob= Dob
+         self.mark = np.array([])
+    def __str__(self):
+        return f" ID: {self.id} \n Name: {self.name} \n Dob: {self.Dob} \n ====================== \n "
+    # input mark of each course to Student, form list.
+    def point(self, id,name, mark, credict):
+        a = id
+        b= name
+        c= mark
+        d =credict
+        point = cc.mark_of_student(a,b,d,c)
+        self.mark= np.append(self.mark,point)
+    # print list of mark in each course of this student
+    def print(self):
+        print("ID: ", self.id,"\nName: ",self.name,"\n===========================\n")
+        for i in range(len(self.mark)):
+            print(self.mark[i])
+    # caculate GPA 
+    def GPA(self):
+        result = 0
+        cre = 0
+        for i in range(len(self.mark)):
+             result = float(result+ fc.cla_GPA(self.mark[i].point,self.mark[i].credict))
+             cre = int(cre + self.mark[i].credict)
+        firesult = float(result /cre)
+        return fc.round_down(firesult)
+    def rank(self):
+        print("ID: "+self.id+"\nName: "+self.name+ "\nGPA: ",self.GPA())
+        print("---------------------------------")
+# make child class of class Student
+class mark_in_course(Student):
+    def __init__(self, id, name, Dob, mark):
+        super().__init__(id, name, Dob)
+        self.mark = mark
+    def __str__(self):
+        return f"ID: {self.id} \t Name: {self.name} \t Mark: {self.mark}"
+    
