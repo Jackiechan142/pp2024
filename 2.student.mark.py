@@ -1,3 +1,4 @@
+# make class Student
 class Student:
     def __init__(self,id, name, Dob,):
          self.id = id
@@ -6,15 +7,19 @@ class Student:
          self.mark = []
     def __str__(self):
         return f" ID: {self.id} \n Name: {self.name} \n Dob: {self.Dob} \n ================= \n "
+    # input mark of each course to Student, form list.
     def point(self, id,name, mark):
         a = id
         b= name
         c= mark
         self.mark.append(input_markstudent(a,b,c))
+    # print list of mark in each course of this student
     def print(self):
         print("ID: ", self.id,"\nName: ",self.name,"\n===========================\n")
         for i in range(len(self.mark)):
             print(self.mark[i])
+
+# make class Crouse
 class Course:
     def __init__(self, id, name,):
         self.id = id
@@ -22,6 +27,7 @@ class Course:
         self.markcour = []
     def __str__(self):
         return f" Id: {self.id} \n Name: {self.name} \n ================================================= \n"
+    # input mark  of each student in this course.
     def mark(self, student):
         try:
             i= True
@@ -50,14 +56,15 @@ class Course:
                     break
                  except ValueError:
                     print("Wrong type of input, please try again.")
-
         except ValueError:
             print("Wrong type of input, please try again.")
             Course.mark(student)
+    # print mark of all student in this cousre
     def print(self):
         print(" Id:",self.id," \n Name: ", self.name,"\n ================================================= \n")
         for i in range(len(self.markcour)):
             print(self.markcour[i])
+# input data of student
 def input_student(stud):
     try: 
          n = int(input("Number of Student you want to add: "))
@@ -71,7 +78,7 @@ def input_student(stud):
     except ValueError:
         print("Wrong type of input, please try again.")
         input_student(stud)
-
+# input data of cousre
 def input_Course(Cour):
     try:
         n = int(input("Number of Course you want to add: "))
@@ -84,6 +91,7 @@ def input_Course(Cour):
     except ValueError:
         print("Wrong type of input, please try again.")
         input_Course(Cour)
+# make a dict to input mark of each student to Course
 def input_markcourse(id, name, mark):
     table= {
         'ID':id,
@@ -91,6 +99,7 @@ def input_markcourse(id, name, mark):
         'Mark':mark
     }
     return table
+# make a dict to input mark of each cousre to Student
 def input_markstudent(id,name,mark):
     table = {
         'ID of course':id,
@@ -98,6 +107,7 @@ def input_markstudent(id,name,mark):
         'Mark': mark
     }
     return table
+
 def clear():
     print("\033c")
 
@@ -192,7 +202,7 @@ def main():
                             cot = cot +1
                     if (cot == len(stud)):
                         print("This ID is not found.")
-                        exit()
+                    exit()
                 case '0':
                     break
         except ValueError: 
