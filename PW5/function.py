@@ -12,26 +12,19 @@ def cla_GPA(mark, credict):
     return result
 
 # remove student
-def remove_student(stud):
-    a = input("ID of student you want to remove: ")
-    cout = 0
-    for i in range(len(stud)):
-        if (a == stud[i].id):
-            np.delete(stud,i)
-        else:
-            cout = cout +1
-    if (cout == len(stud)):
-        print("This ID is not found.")
-def remove_course(cour):
-    a = input("ID of course you want to remove: ")
-    cout = 0
+def remove_student(stud,cour):
     for i in range(len(cour)):
-        if (a == cour[i].id):
-            np.delete(cour,i)
-        else:
-            cout = cout +1
-    if cout == len(cour):
-        print("This ID is not found.")
+        for j in range(len(cour[i].markcour)):
+           if stud.id == cour[i].markcour[j].id:
+               cour[i].markcour = np.delete(cour[i].markcour,j)
+               break
+def remove_course(cour,stud):
+    for i in range(len(stud)):
+        for j in range(len(stud[i].mark)):
+            if cour.id == stud[i].mark[j].id:
+                stud[i].mark = np.delete(stud[i].mark,j)
+                break
+    
 
 def clear():
     print("\033c")
@@ -77,4 +70,3 @@ def check_zip(zf):
         return True
     else:
         return False
-    

@@ -52,7 +52,7 @@ def main():
         print("7. Delete data.")
         print("8. Show mark of each Student.")
         print("9. Rank of GPA.")
-        print("10. Reset data.")
+        print("10. clear all data.")
         print("0. Exit")
         choose = input("Please choose: ")
         match choose:
@@ -139,6 +139,8 @@ def main():
                             out = 0
                             for i in range(len(student)):
                                 if (q == student[i].id):
+                                      fc.remove_student(student[i],course)
+                                      fc.write_mark(course)
                                       student = np.delete(student,i)
                                       fc.write_file(student)
                                       break
@@ -151,6 +153,7 @@ def main():
                             ou = 0
                             for i in range(len(course)):
                                 if (w == course[i].id):
+                                  fc.remove_course(course[i],student)
                                   course = np.delete(course,i)
                                   fc.print_file(course)
                                   break
@@ -167,6 +170,31 @@ def main():
                     fc.clear()
                     op.print_GPA(student)
                     fc.exit()
+                case '10':
+                    fc.clear()
+                    sure=input("Are you sure? Y?N")
+                    match sure:
+                        case 'Y':
+                            student = np.delete(student,np.s_[:])
+                            course = np.delete(course,np.s_[:])
+                            fc.write_file(student)
+                            fc.print_file(course)
+                            with open(f3,'w') as file:
+                                pass
+                        case 'y':
+                            student = np.delete(student,np.s_[:])
+                            course = np.delete(course,np.s_[:])
+                            fc.write_file(student)
+                            fc.print_file(course)
+                            with open(f3,'w') as file:
+                                pass
+                        case 'N':
+                            print("OK, fine!")
+                            fc.exit()
+                        case 'n':
+                            print("OK, fine!")
+                            fc.exit()
+            
                 case '0':
                     fc.zip_file()
                     break
