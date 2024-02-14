@@ -198,12 +198,32 @@ def main():
                     exit()
                 case '5':
                     clear()
-                    # while(len(Cour) == 0):
-                    #     print("There no course, please input data of course.")
-                    #     input_Course(Cour)
-                    # while(len(stud) == 0):
-                    #     print("There no data of Student, please input information of student.")
-                    #     input_student(stud)
+                    while(len(stud) == 0):
+                        print("There no course, please input data of course.")
+                    try: 
+                        n = int(input("Number of Student you want to add: "))
+                        for i in range(n):
+                           id = input("Id of student: ")
+                           name = input("Name of Student: ")
+                           dob = input("Dob of Student: ")
+                           print("==================")
+                           stu = Student(id,name,dob)  
+                           stud = np.append(stud,stu)
+                    except ValueError:
+                       print("Wrong type of input, please try again.")
+                    while(len(Cour) == 0):
+                        print("There no data of Student, please input information of student.")
+                    try:
+                       n = int(input("Number of Course you want to add: "))
+                       for i in range(n):
+                            id = input("Id of course: ")
+                            name = input("Name of cousre: ")
+                            credict = int(input("Credict of this course: "))
+                            print("===================")
+                            cou = Course(id,name,credict)
+                            Cour = np.append(Cour,cou)
+                    except ValueError:
+                             print("Wrong type of input, please try again.")
                     k = input("ID of course you want to add mark: ")
                     count = 0
                     for i in range(len(Cour)):
