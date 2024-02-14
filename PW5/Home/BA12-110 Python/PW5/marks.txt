@@ -1,0 +1,9 @@
+ID of course: 0002	 Name of course: python	 Credict: 4
+ID: 142 	 Name: jackie 	 Mark: 18.4
+ID: 089 	 Name: huy 	 Mark: 16.9
+ID of course: 001	 Name of course: oop	 Credict: 3
+ID: 142 	 Name: jackie 	 Mark: 17.8
+ID: 089 	 Name: huy 	 Mark: 16.4
+ID of course: 002	 Name of course: python	 Credict: 4
+ID of course: 001	 Name of course: oop	 Credict: 3
+ID: 142 	 Name: jackie 	 Mark: 20.0
