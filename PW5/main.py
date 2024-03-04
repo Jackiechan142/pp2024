@@ -4,141 +4,131 @@ import output as op
 import function as fc
 import numpy as np
 import zipfile
-def main():
-    zf = "Students.dat"
-    if bool(fc.check_zip(zf)):
-        print("File have data before.")
-    else:
-        print("No data before.")
+import os
+import Box
+from curses import wrapper
+def main(stdscr):
     student = np.array([])
     course = np.array([])
-    f1 = "students.txt"
+    zf = "Students.dat"
+    f1 = 'students.txt'
     f2 = 'courses.txt'
     f3 = 'marks.txt'
-    with open(f1,'r') as file:
-        lines = file.readlines()
-        for line in lines:
-            arr = line.split("||")
-            if (len(arr) == 3):
-                student = np.append(student, ip.load_student(arr[0],arr[1],arr[2]))
-            else: 
-                continue
-    with open(f2,'r') as file1:
-        lines1= file1.readlines()
-        for line1 in lines1:
-            arr1= line1.split("||")
-            course = np.append(course, ip.load_course(arr1[0],arr1[1],int(arr1[2])))
-    with open(f3, 'r') as file2:
-        lines2 = file2.readlines()
-        for line2 in lines2:
-            arr2 = line2.split("----------")
-            arr3 = line2.split("\t||\t")
-            if (len(arr2)==1):
-                for j in range(len(student)):
-                    if (arr3[0] == student[j].id):
-                        ip.load_mark(course[number],student[j],float(arr3[2]))
-                continue
-            else:
-                for i in range(len(course)):
-                    if (arr2[0]==course[i].id):
-                        number = i
+    if os.path.isfile(zf):
+           with zipfile.ZipFile(zf) as zipf:
+               zipf.extractall()
+               list_zip = zipf.namelist()
+               for file_name in list_zip:
+                   if file_name == f1:
+                      with open(f1,'r') as file:
+                        lines = file.readlines()
+                        for line in lines:
+                            arr = line.split("||")
+                            if (len(arr) == 3):
+                                student = np.append(student, ip.load_student(arr[0],arr[1],arr[2]))
+                            else: 
+                                continue
+                   elif file_name == f2:
+                        with open(f2,'r') as file1:
+                          lines1= file1.readlines()
+                          for line1 in lines1:
+                             arr1= line1.split("||")
+                             course = np.append(course, ip.load_course(arr1[0],arr1[1],int(arr1[2])))
+                   elif file_name == f3:
+                      with open(f3, 'r') as file2:
+                           lines2 = file2.readlines()
+                           for line2 in lines2:
+                               arr2 = line2.split("----------")
+                               arr3 = line2.split("\t||\t")
+                               if (len(arr2)==1):
+                                 for j in range(len(student)):
+                                     if (arr3[0] == student[j].id):
+                                        ip.load_mark(course[number],student[j],float(arr3[2]))
+                                        continue
+                               else:
+                                    for i in range(len(course)):
+                                      if (arr2[0]==course[i].id):
+                                         number = i
     while(True):
-        print("1. Add information of Student.")
-        print("2. Add information of Course. ")
-        print("3. Show the information of all the Student.")
-        print("4. Show the information of all Course.")
-        print("5. Add the mark in Course.")
-        print("6. Show mark of student in each Course.")
-        print("7. Delete data.")
-        print("8. Show mark of each Student.")
-        print("9. Rank of GPA.")
-        print("10. clear all data.")
-        print("0. Exit")
-        choose = input("Please choose: ")
-        match choose:
-                case '1':
-                    fc.clear()
-                    i =0
+        stdscr.clear()
+        stdscr.addstr("1. Add information of Student.\n")
+        stdscr.addstr("2. Add information of Course.\n")
+        stdscr.addstr("3. Show the information of all the Student.\n")
+        stdscr.addstr("4. Show the information of all Course.\n")
+        stdscr.addstr("5. Add the mark in Course.\n")
+        stdscr.addstr("6. Show mark of student in each Course.\n")
+        stdscr.addstr("7. Delete data.\n")
+        stdscr.addstr("8. Show mark of each Student.\n")
+        stdscr.addstr("9. Rank of GPA.\n")
+        stdscr.addstr("10. clear all data.\n")
+        stdscr.addstr("0. Exit\n")
+        stdscr.addstr("Please choice: ")
+        stdscr.refresh()
+        choose = stdscr.getch()
+       
+        if (choose == ord('1')):
+                    student = np.append(student,ip.input_student(stdscr))
+                    stdscr.addstr(10,25,"Student added done.")
                     try:
-                      n = int(input("Number of Student you want to add: "))
-                      while(i< n ):
-                        student = np.append(student,ip.input_student())
-                        i = i + 1
                       fc.write_file(student)
-                    except ValueError:
-                        print("Wrong type of input, please try again.")
                     except IOError:
                         print("Error in write to file.")
-                case '2':
-                    fc.clear()
-                    c = 0
+                    stdscr.refresh()
+                    stdscr.getch()
+        elif choose == ord('2'):
+                    course = np.append(course,ip.input_Course(stdscr))
+                    stdscr.addstr(10,25,"Course added done.")
                     try:
-                      h = int(input("Number of Course you want to add: "))
-                      while(c< h ):
-                        course = np.append(course,ip.input_Course())
-                        c = c + 1
                       fc.print_file(course)
-                    except ValueError:
-                        print("Wrong type of input, please try again.")
                     except IOError:
                         print("Error in write to file.")
-                case '3':
-                    fc.clear()
-                    op.print_student_infor(student)
-                    fc.exit()
-                case '4':
-                    fc.clear()
-                    op.print_course_infor(course)
-                    fc.exit()
-                case '5':
-                    fc.clear()
+                    stdscr.refresh()
+                    stdscr.getch()
+        elif choose == ord('3'):
+                    op.print_student_infor(student,stdscr)
+        elif choose == ord('4'):       
+                    op.print_course_infor(course,stdscr)     
+        elif choose == ord('5'):
                     while(len(course) == 0):
-                         print("There no course, please input data of course.")
-                         a = 0
+                         stdscr.addstr("There no course, please input data of course.")
+                         student = np.append(student,ip.input_student(stdscr))
+                         stdscr.addstr(10,25,"Student added done.")
                          try:
-                             b = int(input("Number of Course you want to add: "))
-                             while(a< b ):
-                                 course = np.append(course,ip.input_Course())
-                                 a = a + 1
-                             fc.print_file(course)
-                         except ValueError:
-                             print("Wrong type of input, please try again.")
-                         except IOError:
-                             print("Error in write to file")
-                    while (len(student)==0):
-                        print("There no data of student, please input data of student.")
-                        e= 0
-                        try:
-                            f = int(input("Number of Student you want to add: "))
-                            while(e< f ):
-                               student = np.append(student,ip.input_student())
-                               e = e + 1
                             fc.write_file(student)
-                        except ValueError:
-                            print("Wrong type of input, please try again.")
+                         except IOError:
+                           print("Error in write to file.")
+                         stdscr.refresh()
+                         stdscr.getch()
+                    while (len(student)==0):
+                        course = np.append(course,ip.input_Course(stdscr))
+                        stdscr.addstr(10,25,"Course added done.")
+                        try:
+                           fc.print_file(course)
                         except IOError:
                             print("Error in write to file.")
-                    ip.input_mark(student,course)
+                            stdscr.refresh()
+                            stdscr.getch()
+                    ip.input_mark(student,course,stdscr)
                     try:
                             fc.write_mark(course)
                     except IOError:
                         print("Error in write to file.")
-                    fc.exit()
-                case '6':
-                    fc.clear()
-                    op.print_mark_of_course(course)
-                    fc.exit()
-                case '7':
-                    fc.clear()
-                    print("1. Remove student.")
-                    print("2. Remove course.")
-                    chos = input("Your choose: ")
-                    match chos:
-                        case '1':
-                            q = input("ID of student you want to remove: ")
+        elif choose == ord('6'):   
+                    op.print_mark_of_course(course,stdscr)
+        elif choose == ord('7'):
+                    stdscr.clear()
+                    stdscr.addstr(1,2,"1. Remove student.")
+                    stdscr.addstr(2,2,"2. Remove course.")
+                    stdscr.addstr(3,2,"Your choose: ")
+                    stdscr.refresh()
+                    chos = stdscr.getch()
+                    if chos == ord("1"):
+                            stdscr.clear()
+                            stdscr.addstr(1,2,"Student you want to remove")
+                            q = Box.makebox(stdscr,"ID",1,20,2,2)
                             out = 0
                             for i in range(len(student)):
-                                if (q == student[i].id):
+                                if (q.gather() == student[i].id):
                                       fc.remove_student(student[i],course)
                                       fc.write_mark(course)
                                       student = np.delete(student,i)
@@ -147,12 +137,14 @@ def main():
                                 else:
                                   out = out +1
                             if (out > len(student)):
-                                print("This ID is not found.")
-                        case '2':
-                            w = input("ID of course you want to remove: ")
+                                stdscr.addstr(4,2,"This ID is not found.")
+                    elif chos == ord("2"):
+                            stdscr.clear()
+                            stdscr.addstr(1,2,"Course you want to remove")
+                            w = Box.makebox(stdscr,"ID",1,20,2,2)
                             ou = 0
                             for i in range(len(course)):
-                                if (w == course[i].id):
+                                if (w.gather() == course[i].id):
                                   fc.remove_course(course[i],student)
                                   course = np.delete(course,i)
                                   fc.print_file(course)
@@ -160,44 +152,39 @@ def main():
                                 else:
                                     ou = ou +1
                             if ou > len(course):
-                                   print("This ID is not found.")
-                    fc.exit()
-                case '8':
-                    fc.clear()
-                    op.print_mark_of_student(student)
-                    fc.exit()
-                case '9':
-                    fc.clear()
-                    op.print_GPA(student)
-                    fc.exit()
-                case '10':
-                    fc.clear()
-                    sure=input("Are you sure? Y?N")
-                    match sure:
-                        case 'Y':
+                                   stdscr.addstr(4,2,"This ID is not found.")
+                    else:
+                         stdscr.clear()
+                         stdscr.addstr(1,25,"Wrong type of input.")
+                         stdscr.refresh()
+                         stdscr.addstr(18,25,"Press any key to continue ...")
+                         stdscr.getch()
+        elif choose == ord('8'):
+                    op.print_mark_of_student(student,stdscr)
+        elif choose == ord('9'):
+                    op.print_GPA(student,stdscr)
+        elif choose == ord('*'):
+                    stdscr.clear()
+                    stdscr.addstr(1,2,"Are you sure? Y?N")
+                    stdscr.refresh()
+                    sure = stdscr.getch()
+                    if sure == ord("Y") or sure == ord("y"):
                             student = np.delete(student,np.s_[:])
                             course = np.delete(course,np.s_[:])
                             fc.write_file(student)
                             fc.print_file(course)
                             with open(f3,'w') as file:
                                 pass
-                        case 'y':
-                            student = np.delete(student,np.s_[:])
-                            course = np.delete(course,np.s_[:])
-                            fc.write_file(student)
-                            fc.print_file(course)
-                            with open(f3,'w') as file:
-                                pass
-                        case 'N':
+                    elif sure == ord("N") or sure == ord("n"):  
                             print("OK, fine!")
-                            fc.exit()
-                        case 'n':
-                            print("OK, fine!")
-                            fc.exit()
-            
-                case '0':
+                    else:
+                          break
+                    stdscr.refresh()
+                    stdscr.addstr(18,25,"Press any key to continue ...")
+                    stdscr.getch()
+        elif choose == ord('0'):
                     fc.zip_file()
                     break
        
-
-main()
+if __name__=="__main__":
+   wrapper(main)

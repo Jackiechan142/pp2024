@@ -18,10 +18,14 @@ class Student:
         point = cc.mark_of_student(a,b,d,c)
         self.mark= np.append(self.mark,point)
     # print list of mark in each course of this student
-    def print(self):
-        print("ID: ", self.id,"\nName: ",self.name,"\n===========================\n")
+    def print(self,stdscr):
+        stdscr.clear()
+        stdscr.addstr(0,2,f"ID: {self.id} \t Name: {self.name} \t Dob: {self.Dob}")
+        stdscr.addstr(2,2,f"{'Id of course':<15}{'Name of course':<30}{'Mark':<5}")
+        row =4
         for i in range(len(self.mark)):
-            print(self.mark[i])
+            stdscr.addstr(row,2,f"{self.mark[i].id:<15}{self.mark[i].name:<30}{self.mark[i].point}")
+            row +=2
     # caculate GPA 
     def GPA(self):
         result = 0
@@ -31,9 +35,8 @@ class Student:
              cre = int(cre + self.mark[i].credict)
         firesult = float(result /cre)
         return fc.round_down(firesult)
-    def rank(self):
-        print("ID: "+self.id+"\nName: "+self.name+ "\nGPA: ",self.GPA())
-        print("---------------------------------")
+    def rank(self,stdscr,row):
+        stdscr.addstr(row,2,f"ID: {self.id:<15}Name: {self.name:<30}GPA: {self.GPA()}")
 # make child class of class Student
 class mark_in_course(Student):
     def __init__(self, id, name, Dob, mark):

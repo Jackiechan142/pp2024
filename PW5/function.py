@@ -26,13 +26,6 @@ def remove_course(cour,stud):
                 break
     
 
-def clear():
-    print("\033c")
-
-def exit():
-    input("\nPress Enter to exit ...")
-    clear()
-
 # write to file student.txt
 def write_file(student):
    f = open("students.txt","w")
@@ -64,9 +57,5 @@ def zip_file():
    with zipfile.ZipFile(zp,'w') as zip_ref:
        for f in fz:
            zip_ref.write(f)
+           os.remove(f)
    print("Zip file created succesfully.")
-def check_zip(zf):
-    if os.path.exists(zf):
-        return True
-    else:
-        return False

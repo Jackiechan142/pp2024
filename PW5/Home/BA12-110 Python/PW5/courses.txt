@@ -1,3 +1,0 @@
-ID: 001
-Name: oop
-Credict: 3
