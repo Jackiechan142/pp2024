@@ -10,10 +10,7 @@ import pickle
 from curses import wrapper
 import threading
 
-
-
-    
-def read_data(zf, student, course):
+def read_data(zf,student, course):
    if os.path.isfile(zf):   
       with zipfile.ZipFile(zf) as zipf:
          zipf.extractall()
@@ -55,55 +52,24 @@ def read_data(zf, student, course):
                                     t= False
                       except EOFError:
                         break
-
+   return student,course
+     
 def main(stdscr): 
     student = np.array([])
     course = np.array([])
     zf = "Students.dat"
-    t1= threading.Thread(target=read_data, args=(zf, student, course))
-    t1.start()
-    t1.join()
-    # if os.path.isfile(zf):   
-    #   with zipfile.ZipFile(zf) as zipf:
-    #      zipf.extractall()
-    #      list_zip = zipf.namelist()
-    #      for file_name in list_zip:
-    #          if file_name == 'students.txt':
-    #             with open('students.txt','rb') as file:
-    #                 while True:
-    #                    try:
-    #                         data = pickle.load(file)
-    #                         student = np.append(student,data)
-    #                    except EOFError:
-    #                        break
-    #          elif file_name ==  'courses.txt':
-    #             with open( 'courses.txt','rb') as file1:
-    #                while True:
-    #                  try:   
-    #                     data1 = pickle.load(file1)
-    #                     course = np.append(course,data1)
-    #                  except EOFError:
-    #                     break
-    #          elif file_name == 'marks.txt':
-    #            with open('marks.txt', 'rb') as file2:
-    #               while True:
-    #                   try:   
-    #                      data2 = pickle.load(file2)
-    #                      t= True
-    #                      for i in range(len(course)):
-    #                         if data2.id == course[i].id and data2.name == course[i].name:
-    #                             numb = 0
-    #                             while t:
-    #                               datamark = pickle.load(file2)
-    #                               for j in range(len(student)):
-    #                                  if (datamark.id==student[j].id):
-    #                                     ip.load_mark(course[i],student[j],float(datamark.mark))
-    #                                  else:
-    #                                    numb +=1
-    #                               if numb == len(student):
-    #                                 t= False
-    #                   except EOFError:
-    #                     break
+    result= read_data(zf, student, course) 
+   #  t1= threading.Thread(target=read_data, args=(zf, student,course))
+   #  t1.start()
+   #  t1.join()
+    student,course=result 
+    try:
+      fc.write_file(student)
+      fc.print_file(course)
+      fc.write_mark(course)
+    except IOError:
+       print("Error in write to file.")
+    
 
     while(True):
         stdscr.clear()
@@ -123,47 +89,20 @@ def main(stdscr):
         choose = stdscr.getch()
        
         if (choose == ord('1')):
-                    student = np.append(student,ip.input_student(stdscr))
-                    stdscr.addstr(10,25,"Student added done.")
-                    try:
-                      fc.write_file(student)
-                    except IOError:
-                        print("Error in write to file.")
-                    stdscr.refresh()
-                    stdscr.getch()
+            student=ip.case_1(student,stdscr)
         elif choose == ord('2'):
-                    course = np.append(course,ip.input_Course(stdscr))
-                    stdscr.addstr(10,25,"Course added done.")
-                    try:
-                      fc.print_file(course)
-                    except IOError:
-                        print("Error in write to file.")
-                    stdscr.refresh()
-                    stdscr.getch()
+            course = ip.case_2(course,stdscr)
         elif choose == ord('3'):
                     op.print_student_infor(student,stdscr)
         elif choose == ord('4'):       
                     op.print_course_infor(course,stdscr)     
         elif choose == ord('5'):
                     while(len(course) == 0):
-                         stdscr.addstr("There no course, please input data of course.")
-                         student = np.append(student,ip.input_student(stdscr))
-                         stdscr.addstr(10,25,"Student added done.")
-                         try:
-                            fc.write_file(student)
-                         except IOError:
-                           print("Error in write to file.")
-                         stdscr.refresh()
-                         stdscr.getch()
+                         stdscr.addstr(1,10,"There no Course, please input data of course.")
+                         course = ip.case_2(course,stdscr)
                     while (len(student)==0):
-                        course = np.append(course,ip.input_Course(stdscr))
-                        stdscr.addstr(10,25,"Course added done.")
-                        try:
-                           fc.print_file(course)
-                        except IOError:
-                            print("Error in write to file.")
-                            stdscr.refresh()
-                            stdscr.getch()
+                         stdscr.addstr(1,10,"There no Student, please input data of Student.")
+                         student = ip.case_1(student,stdscr)
                     ip.input_mark(student,course,stdscr)
                     try:
                             fc.write_mark(course)
@@ -229,7 +168,7 @@ def main(stdscr):
                             course = np.delete(course,np.s_[:])
                             fc.write_file(student)
                             fc.print_file(course)
-                            with open(f3,'w') as file:
+                            with open('marks.txt','w') as file:
                                 pass
                     elif sure == ord("N") or sure == ord("n"):  
                             print("OK, fine!")

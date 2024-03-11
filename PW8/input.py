@@ -2,6 +2,7 @@ from domain import Student_class as sc
 from domain import Crouse_class as cc
 import numpy as np
 import Box
+import function as fc
 # input data of student
 def input_student(stdscr): 
        stdscr.clear()
@@ -99,4 +100,23 @@ def load_mark(Cour, stud, mark):
     Cour.markcour = np.append(Cour.markcour,point)
     stud.point(Cour.id,Cour.name,a, Cour.credict)
     
-    
+def case_1(student,stdscr):
+    student = np.append(student,input_student(stdscr))
+    stdscr.addstr(10,25,"Student added done.")
+    try:
+      fc.write_file(student)
+    except IOError:
+      print("Error in write to file.")
+    stdscr.refresh()
+    stdscr.getch()
+    return student
+def case_2(course, stdscr):
+   course = np.append(course,input_Course(stdscr))
+   stdscr.addstr(10,25,"Course added done.")
+   try:
+      fc.print_file(course)
+   except IOError:
+      print("Error in write to file.")
+      stdscr.refresh()
+      stdscr.getch()
+   return course
