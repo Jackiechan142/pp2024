@@ -4,7 +4,7 @@ import numpy as np
 import Box
 import function as fc
 # input data of student
-def input_student(stdscr): 
+def input_student(stdscr,student): 
        stdscr.clear()
        IdBox = Box.makebox(stdscr,"ID",1,20,2,2)
        NameBox = Box.makebox(stdscr,"Name",1,20,4,2)
@@ -16,6 +16,10 @@ def input_student(stdscr):
        while True:
          if IdBox.gather().strip() == "":
             stdscr.addstr(8,2,"Please fill in Id fields!")
+            stdscr.refresh()
+            IdBox.edit()
+         elif fc.check_ID(IdBox.gather(),student) == True:
+            stdscr.addstr(8,2,"This student's ID is already exists, please try again.")
             stdscr.refresh()
             IdBox.edit()
          elif NameBox.gather().strip() == "":
@@ -33,7 +37,7 @@ def input_student(stdscr):
        return stu
    
 # input data of cousre
-def input_Course(stdscr):
+def input_Course(stdscr,course):
       stdscr.clear()
       id = Box.makebox(stdscr,"Course ID", 1,20,2,2)
       name = Box.makebox(stdscr,"Course Name",1,20,4,2)
@@ -46,6 +50,10 @@ def input_Course(stdscr):
       while t:
          if id.gather().strip() == "":
             stdscr.addstr(8,2,"Please fill in Course ID fields!")
+            stdscr.refresh()
+            id.edit()
+         elif fc.check_ID(id.gather(),course)== True:
+            stdscr.addstr(8,2,"This course's ID is already exists, please try again.")
             stdscr.refresh()
             id.edit()
          elif name.gather().strip() == "":
@@ -101,7 +109,8 @@ def load_mark(Cour, stud, mark):
     stud.point(Cour.id,Cour.name,a, Cour.credict)
     
 def case_1(student,stdscr):
-    student = np.append(student,input_student(stdscr))
+    student = np.append(student,input_student(stdscr,student))
+    stdscr.addstr(8,2," "*60)
     stdscr.addstr(10,25,"Student added done.")
     try:
       fc.write_file(student)
@@ -111,7 +120,8 @@ def case_1(student,stdscr):
     stdscr.getch()
     return student
 def case_2(course, stdscr):
-   course = np.append(course,input_Course(stdscr))
+   course = np.append(course,input_Course(stdscr,course))
+   stdscr.addstr(8,2," "*60)
    stdscr.addstr(10,25,"Course added done.")
    try:
       fc.print_file(course)

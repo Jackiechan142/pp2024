@@ -25,28 +25,26 @@ def remove_course(cour,stud):
             if cour.id == stud[i].mark[j].id:
                 stud[i].mark = np.delete(stud[i].mark,j)
                 break
-    
+
+# check duplicate ID:
+def check_ID(id,clas):
+    for i in range(len(clas)):
+        if id == clas[i].id:
+            return True
+    return False
 
 # write to file student.txt
 def write_file(student):
     with open("students.txt","wb") as file:
         for i in range(len(student)): 
              pickle.dump(student[i],file)
-#    f = open("students.txt","w")
-#    for i in range(len(student)):
-#        f.writelines(student[i].id+"||"+student[i].name+"||"+student[i].Dob)
-#        f.write("\n")
-#    f.close()
+
 # write to file courses.txt
 def print_file(course):
     with open('courses.txt','wb') as file:
         for i in range(len(course)):
             pickle.dump(course[i],file)
-    # f= open("courses.txt","w")
-    # for i in range(len(course)):
-    #     f.write(course[i].id+"||"+course[i].name+"||"+str(course[i].credict))
-    #     f.write("\n")
-    # f.close()
+  
 # write to file marks.txt
 def write_mark(courese):
     with open('marks.txt','wb') as file:
@@ -54,14 +52,7 @@ def write_mark(courese):
             pickle.dump(courese[i],file)
             for j in range(len(courese[i].markcour)):
                 pickle.dump(courese[i].markcour[j],file)
-    # f= open("marks.txt","w") 
-    # for i in range(len(courese)):
-    #     f.write(courese[i].id +"----------"+courese[i].name+"----------"+str(courese[i].credict))
-    #     f.write("\n")
-    #     for j in range(len(courese[i].markcour)):
-    #        f.write(courese[i].markcour[j].id+"\t||\t"+courese[i].markcour[j].name+"\t||\t"+str(courese[i].markcour[j].mark))
-    #        f.write("\n")
-    # f.close()
+
 # create a Zipfile Object:
 def zip_file():
    zp = "Students.dat"

@@ -10,7 +10,13 @@ import pickle
 from curses import wrapper
 import threading
 
-def read_data(zf,student, course):
+student = np.array([])
+course = np.array([])
+zf = "Students.dat"
+
+def read_data():
+   global student
+   global course
    if os.path.isfile(zf):   
       with zipfile.ZipFile(zf) as zipf:
          zipf.extractall()
@@ -53,24 +59,24 @@ def read_data(zf,student, course):
                       except EOFError:
                         break
    return student,course
+
+
      
 def main(stdscr): 
-    student = np.array([])
-    course = np.array([])
-    zf = "Students.dat"
-    result= read_data(zf, student, course) 
-   #  t1= threading.Thread(target=read_data, args=(zf, student,course))
-   #  t1.start()
-   #  t1.join()
-    student,course=result 
+    global student
+    global course
+  
+    t1= threading.Thread(target=read_data)
+    t1.start()
+    t1.join()
+
     try:
       fc.write_file(student)
       fc.print_file(course)
       fc.write_mark(course)
     except IOError:
        print("Error in write to file.")
-    
-
+   
     while(True):
         stdscr.clear()
         stdscr.addstr("1. Add information of Student.\n")
@@ -82,21 +88,22 @@ def main(stdscr):
         stdscr.addstr("7. Delete data.\n")
         stdscr.addstr("8. Show mark of each Student.\n")
         stdscr.addstr("9. Rank of GPA.\n")
-        stdscr.addstr("10. clear all data.\n")
+        stdscr.addstr("*. Clear all data.\n")
         stdscr.addstr("0. Exit\n")
         stdscr.addstr("Please choice: ")
         stdscr.refresh()
-        choose = stdscr.getch()
-       
-        if (choose == ord('1')):
+        try:
+          choose = stdscr.getch()
+        
+          if (choose == ord('1')):
             student=ip.case_1(student,stdscr)
-        elif choose == ord('2'):
+          elif choose == ord('2'):
             course = ip.case_2(course,stdscr)
-        elif choose == ord('3'):
+          elif choose == ord('3'):
                     op.print_student_infor(student,stdscr)
-        elif choose == ord('4'):       
-                    op.print_course_infor(course,stdscr)     
-        elif choose == ord('5'):
+          elif choose == ord('4'):       
+                    op.print_course_infor(course,stdscr)  
+          elif choose == ord('5'):
                     while(len(course) == 0):
                          stdscr.addstr(1,10,"There no Course, please input data of course.")
                          course = ip.case_2(course,stdscr)
@@ -108,9 +115,9 @@ def main(stdscr):
                             fc.write_mark(course)
                     except IOError:
                         print("Error in write to file.")
-        elif choose == ord('6'):   
+          elif choose == ord('6'):   
                     op.print_mark_of_course(course,stdscr)
-        elif choose == ord('7'):
+          elif choose == ord('7'):
                     stdscr.clear()
                     stdscr.addstr(1,2,"1. Remove student.")
                     stdscr.addstr(2,2,"2. Remove course.")
@@ -154,11 +161,11 @@ def main(stdscr):
                          stdscr.refresh()
                          stdscr.addstr(18,25,"Press any key to continue ...")
                          stdscr.getch()
-        elif choose == ord('8'):
+          elif choose == ord('8'):
                     op.print_mark_of_student(student,stdscr)
-        elif choose == ord('9'):
+          elif choose == ord('9'):
                     op.print_GPA(student,stdscr)
-        elif choose == ord('*'):
+          elif choose == ord('*'):
                     stdscr.clear()
                     stdscr.addstr(1,2,"Are you sure? Y?N")
                     stdscr.refresh()
@@ -171,15 +178,22 @@ def main(stdscr):
                             with open('marks.txt','w') as file:
                                 pass
                     elif sure == ord("N") or sure == ord("n"):  
-                            print("OK, fine!")
+                            stdscr.addstr(20,30,"OK, fine!")
+                            stdscr.refresh()
+                            stdscr.addstr(18,25,"Press any key to continue ...")
+                            stdscr.getch()
                     else:
                           break
                     stdscr.refresh()
                     stdscr.addstr(18,25,"Press any key to continue ...")
                     stdscr.getch()
-        elif choose == ord('0'):
+          elif choose == ord('0'):
                     fc.zip_file()
-                    break      
+                    break     
+        except KeyboardInterrupt:
+            fc.zip_file()
+            break
+
 if __name__=="__main__":
    wrapper(main)
    
