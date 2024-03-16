@@ -3,6 +3,7 @@ from domain import Crouse_class as cc
 import numpy as np
 import Box
 import function as fc
+import output as op
 # input data of student
 def input_student(stdscr,student): 
        stdscr.clear()
@@ -78,8 +79,14 @@ def input_Course(stdscr,course):
 # input mark in each course
 def input_mark(stud, Cour,stdscr):
     stdscr.clear()
+    stdscr.addstr(2,0,f"{'ID':<15}{'Name':<30}{'Credict':<15}")
+    stdscr.addstr(3,0,"-"*60)
+    row = 4
+    for i in range(len(Cour)):
+        stdscr.addstr(row,0,f"{Cour[i].id:<15}{Cour[i].name:<30}{Cour[i].credict:<15}")
+        row +=2
     stdscr.addstr(0,2,"Course you want to add mark")
-    k =Box.makebox(stdscr,"ID",1,20,2,2)
+    k =Box.makebox(stdscr,"ID",1,20,row+4,2)
     stdscr.refresh()
     k.edit()
     count = 0
@@ -89,9 +96,9 @@ def input_mark(stud, Cour,stdscr):
         else:
             count +=1
     if (count == len(Cour)):
-        print("Id of course not found.")
+        stdscr.addstr(row+8,2,"Id of course is not exists.")
     stdscr.refresh()
-    stdscr.addstr(15,0,"Press any key to continue ...")
+    stdscr.addstr(row+14,20,"Press any key to continue ...")
     stdscr.getch()
 def load_student(id,name,dob):
     stu = sc.Student(id,name,dob)

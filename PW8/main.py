@@ -5,7 +5,6 @@ import function as fc
 import numpy as np
 import zipfile
 import os
-import Box
 import pickle
 from curses import wrapper
 import threading
@@ -51,6 +50,9 @@ def read_data():
                                   datamark = pickle.load(file2)
                                   for j in range(len(student)):
                                      if (datamark.id==student[j].id):
+                                        if fc.check_mark(datamark.id,course[i].markcour) == True:
+                                             t= False
+                                             break
                                         ip.load_mark(course[i],student[j],float(datamark.mark))
                                      else:
                                        numb +=1
@@ -61,7 +63,6 @@ def read_data():
    return student,course
 
 
-     
 def main(stdscr): 
     global student
     global course
@@ -81,8 +82,8 @@ def main(stdscr):
         stdscr.clear()
         stdscr.addstr("1. Add information of Student.\n")
         stdscr.addstr("2. Add information of Course.\n")
-        stdscr.addstr("3. Show the information of all the Student.\n")
-        stdscr.addstr("4. Show the information of all Course.\n")
+        stdscr.addstr("3. Show the information.\n")
+        stdscr.addstr("4. Fix mark.\n")
         stdscr.addstr("5. Add the mark in Course.\n")
         stdscr.addstr("6. Show mark of student in each Course.\n")
         stdscr.addstr("7. Delete data.\n")
@@ -100,9 +101,9 @@ def main(stdscr):
           elif choose == ord('2'):
             course = ip.case_2(course,stdscr)
           elif choose == ord('3'):
-                    op.print_student_infor(student,stdscr)
-          elif choose == ord('4'):       
-                    op.print_course_infor(course,stdscr)  
+              fc.show_choice(stdscr,student,course)
+          elif choose == ord('4'): 
+               fc.Fix_point(stdscr,course,student)
           elif choose == ord('5'):
                     while(len(course) == 0):
                          stdscr.addstr(1,10,"There no Course, please input data of course.")
@@ -118,49 +119,29 @@ def main(stdscr):
           elif choose == ord('6'):   
                     op.print_mark_of_course(course,stdscr)
           elif choose == ord('7'):
-                    stdscr.clear()
-                    stdscr.addstr(1,2,"1. Remove student.")
-                    stdscr.addstr(2,2,"2. Remove course.")
-                    stdscr.addstr(3,2,"Your choose: ")
-                    stdscr.refresh()
-                    chos = stdscr.getch()
-                    if chos == ord("1"):
-                            stdscr.clear()
-                            stdscr.addstr(1,2,"Student you want to remove")
-                            q = Box.makebox(stdscr,"ID",1,20,2,2)
-                            out = 0
-                            for i in range(len(student)):
-                                if (q.gather() == student[i].id):
-                                      fc.remove_student(student[i],course)
-                                      fc.write_mark(course)
-                                      student = np.delete(student,i)
-                                      fc.write_file(student)
-                                      break
-                                else:
-                                  out = out +1
-                            if (out > len(student)):
-                                stdscr.addstr(4,2,"This ID is not found.")
-                    elif chos == ord("2"):
-                            stdscr.clear()
-                            stdscr.addstr(1,2,"Course you want to remove")
-                            w = Box.makebox(stdscr,"ID",1,20,2,2)
-                            ou = 0
-                            for i in range(len(course)):
-                                if (w.gather() == course[i].id):
-                                  fc.remove_course(course[i],student)
-                                  course = np.delete(course,i)
-                                  fc.print_file(course)
-                                  break
-                                else:
-                                    ou = ou +1
-                            if ou > len(course):
-                                   stdscr.addstr(4,2,"This ID is not found.")
-                    else:
-                         stdscr.clear()
-                         stdscr.addstr(1,25,"Wrong type of input.")
-                         stdscr.refresh()
-                         stdscr.addstr(18,25,"Press any key to continue ...")
-                         stdscr.getch()
+                  #   stdscr.clear()
+                  #   stdscr.addstr(1,2,"1. Remove student.")
+                  #   stdscr.addstr(2,2,"2. Remove course.")
+                  #   stdscr.addstr(3,2,"Your choose: ")
+                  #   stdscr.refresh()
+                  #   try:
+                     #  want = stdscr.getch()
+
+                     #  if want == ord('1'):
+                     #   student,course= fc.remove1(stdscr,student,course)
+                     #  elif want == ord('2'):
+                      student,course = fc.remove2(stdscr,student,course)
+                     #  else:
+                     #     stdscr.clear()
+                     #     stdscr.addstr(1,25,"Wrong type of input.")
+                     #     stdscr.refresh()
+                     #     stdscr.addstr(18,25,"Press any key to continue ...")
+                     #     stdscr.getch()
+                  #   except ValueError:
+                  #        stdscr.addstr(5,5,"Something wrong, it's not work!")
+                  #        stdscr.refresh()
+                  #        stdscr.addstr(18,25,"Press any key to continue ...")
+                  #        stdscr.getch()
           elif choose == ord('8'):
                     op.print_mark_of_student(student,stdscr)
           elif choose == ord('9'):
@@ -188,11 +169,23 @@ def main(stdscr):
                     stdscr.addstr(18,25,"Press any key to continue ...")
                     stdscr.getch()
           elif choose == ord('0'):
-                    fc.zip_file()
-                    break     
+                     try:
+                       fc.write_file(student)
+                       fc.print_file(course)
+                       fc.write_mark(course)
+                       fc.zip_file()
+                     except IOError:
+                          print("Error in write to file.")
+                     break     
         except KeyboardInterrupt:
-            fc.zip_file()
-            break
+             try:
+                 fc.write_file(student)
+                 fc.print_file(course)
+                 fc.write_mark(course)
+             except IOError:
+                   print("Error in write to file.")
+             fc.zip_file()
+             break
 
 if __name__=="__main__":
    wrapper(main)

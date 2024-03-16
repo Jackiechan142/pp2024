@@ -1,3 +1,4 @@
+from typing import Any
 import function as fc
 from domain import Crouse_class as cc
 import numpy as np
@@ -17,6 +18,10 @@ class Student:
         d =credict
         point = cc.mark_of_student(a,b,d,c)
         self.mark= np.append(self.mark,point)
+    def refe_point(self,point,id):
+        for i in range(len(self.mark)):
+            if self.mark[i].id == id:
+                self.mark[i].set_point(point)
     # print list of mark in each course of this student
     def print(self,stdscr):
         stdscr.clear()
@@ -33,7 +38,10 @@ class Student:
         for i in range(len(self.mark)):
              result = float(result+ fc.cla_GPA(self.mark[i].point,self.mark[i].credict))
              cre = int(cre + self.mark[i].credict)
-        firesult = float(result /cre)
+        if cre ==0:
+            firesult = 0
+        else:
+           firesult = float(result /cre)
         return fc.round_down(firesult)
     def rank(self,stdscr,row):
         stdscr.addstr(row,2,f"ID: {self.id:<15}Name: {self.name:<30}GPA: {self.GPA()}")
@@ -44,4 +52,7 @@ class mark_in_course(Student):
         self.mark = mark
     def __str__(self):
         return f"ID: {self.id} \t Name: {self.name} \t Mark: {self.mark}"
-    
+    def get_mark(self):
+        return self.mark
+    def set_mark(self,mark):
+       self.mark = mark

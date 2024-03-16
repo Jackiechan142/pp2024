@@ -3,6 +3,8 @@ import os
 import zipfile
 import numpy as np
 import pickle
+import Box
+import output as op
 def round_down(number):
     a = number*10
     newnumber= float(math.floor(a)/10)
@@ -62,3 +64,105 @@ def zip_file():
            zip_ref.write(f)
            os.remove(f)
    print("Zip file created succesfully.")
+
+# function to remove data
+def remove1(stdscr,student,course):
+        stdscr.clear()
+        stdscr.addstr(1,2,"Student you want to remove")
+        q = Box.makebox(stdscr,"ID",1,20,2,2)
+        out = 0
+        for i in range(len(student)):
+            if (q.gather() == student[i].id):
+                  remove_student(student[i],course)
+                  write_mark(course)
+                  student = np.delete(student,i)
+                  write_file(student)
+                  break
+            else:
+                 out = out +1
+        if (out > len(student)):
+             stdscr.addstr(4,2,"This ID is not found.")
+             stdscr.addstr(18,25,"Press any key to continue ...")
+             stdscr.refresh()
+             stdscr.getch()
+        return student,course
+def remove2(stdscr,student,course):
+    stdscr.clear()
+    stdscr.addstr(1,2,"Course you want to remove")
+    stdscr.addstr(2,0,f"{'ID':<15}{'Name':<30}{'Credict':<15}")
+    stdscr.addstr(3,0,"-"*60)
+    row = 4
+    for i in range(len(course)):
+        stdscr.addstr(row,0,f"{course[i].id:<15}{course[i].name:<30}{course[i].credict:<15}")
+        row +=2
+    w = Box.makebox(stdscr,"ID",1,20,2,2)
+    ou = 0
+    for i in range(len(course)):
+        if (w.gather() == course[i].id):
+             remove_course(course[i],student)
+             course = np.delete(course,i)
+             print_file(course)
+             break
+        else:
+            ou = ou +1
+    if ou > len(course):
+         stdscr.addstr(4,2,"This ID is not found.")
+         stdscr.addstr(18,25,"Press any key to continue ...")
+         stdscr.refresh()
+         stdscr.getch()
+    return student,course
+
+# function to choice what you want to show: student or course?
+def show_choice(stdscr,student,course):
+    stdscr.clear()
+    stdscr.addstr(1,2,"1. Show information of all Students.")
+    stdscr.addstr(2,2,"2. Show information of all Courses.")
+    stdscr.addstr(3,2,"Your choice:")
+    stdscr.refresh()
+    choice = stdscr.getch()
+    if choice == ord('1'):
+        op.print_student_infor(student,stdscr)
+    elif choice == ord('2'):
+        op.print_course_infor(course,stdscr)  
+    else:
+         stdscr.refresh()
+         stdscr.addstr(18,25,"Press any key to continue ...")
+         stdscr.getch()
+
+# Check if this student have mark before.
+def check_mark(id,markcour):
+    for i in range(len(markcour)):
+        if id == markcour[i].id:
+            return True
+    return False
+
+# fix mark for student.
+def Fix_point(stdscr,course,student):
+    stdscr.clear()
+    stdscr.addstr(1,2,"ID of course you want to fix point.")
+    coufix = Box.makebox(stdscr,"ID of Course",1,20,2,2)
+    stdscr.refresh()
+    coufix.edit()
+    while True:
+        if coufix.gather().strip() =="":
+            stdscr.addstr(8,2,"please fill in ID of Course flied.")
+            stdscr.refresh()
+            coufix.edit()
+        else:
+            break
+    for i in range(len(course)):
+        if coufix.gather() == course[i].id:
+            stdscr.clear()
+            stdscr.addstr(0,1,"ID of student you want to fix mark.")
+            idbox = Box.makebox(stdscr,"ID of Student",1,20,2,2)
+            stdscr.refresh()
+            idbox.edit()
+            while True:
+                if idbox.gather().strip() == "":
+                    stdscr.addstr(10,10,"Please fill in ID of Student flied.")
+                    stdscr.refresh()
+                    idbox.edit()
+                else:
+                    break
+            if check_ID(idbox.gather(),student) == True:
+                course[i].fix_mark(stdscr,idbox.gather(),student)
