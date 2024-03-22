@@ -8,6 +8,7 @@ import os
 import pickle
 from curses import wrapper
 import threading
+import Box
 
 student = np.array([])
 course = np.array([])
@@ -119,29 +120,54 @@ def main(stdscr):
           elif choose == ord('6'):   
                     op.print_mark_of_course(course,stdscr)
           elif choose == ord('7'):
-                  #   stdscr.clear()
-                  #   stdscr.addstr(1,2,"1. Remove student.")
-                  #   stdscr.addstr(2,2,"2. Remove course.")
-                  #   stdscr.addstr(3,2,"Your choose: ")
-                  #   stdscr.refresh()
-                  #   try:
-                     #  want = stdscr.getch()
-
-                     #  if want == ord('1'):
-                     #   student,course= fc.remove1(stdscr,student,course)
-                     #  elif want == ord('2'):
-                      student,course = fc.remove2(stdscr,student,course)
-                     #  else:
-                     #     stdscr.clear()
-                     #     stdscr.addstr(1,25,"Wrong type of input.")
-                     #     stdscr.refresh()
-                     #     stdscr.addstr(18,25,"Press any key to continue ...")
-                     #     stdscr.getch()
-                  #   except ValueError:
-                  #        stdscr.addstr(5,5,"Something wrong, it's not work!")
-                  #        stdscr.refresh()
-                  #        stdscr.addstr(18,25,"Press any key to continue ...")
-                  #        stdscr.getch()
+                    stdscr.clear()
+                    stdscr.addstr(1,2,"1. Remove student.")
+                    stdscr.addstr(2,2,"2. Remove course.")
+                    stdscr.addstr(3,2,"Your choose: ")
+                    stdscr.refresh()
+                    try:
+                      want = stdscr.getch()
+                      if want == ord('1'):
+                          stdscr.clear()
+                          idstudent = Box.makebox(stdscr,"ID of student",1,20,2,2)
+                          stdscr.refresh()
+                          idstudent.edit()
+                          dem = 0
+                          for x in range(len(student)):
+                              if student[x].id == idstudent.gather():
+                                  fc.remove_student(student[x],course)
+                                  student = np.delete(student,x)
+                                  stdscr.addstr(6,20,"This Student was remove done!")
+                                  break
+                              else:
+                                  dem +=1
+                          if dem > len(student):
+                              stdscr.addstr(10,20,"This ID is not exists!")
+                      elif want == ord('2'):
+                          stdscr.clear()
+                          idcourse = Box.makebox(stdscr,"ID of course",1,20,2,2)
+                          stdscr.refresh()
+                          idcourse.edit()
+                          dow = 0
+                          for m in range(len(course)):
+                              if course[m].id == idcourse.gather():
+                                  fc.remove_course(course[m],student)
+                                  course = np.delete(course,m)
+                                  stdscr.addstr(6,20,"This Course was remove done!")
+                                  break
+                              else:
+                                  dow +=1
+                          if dow > len(course):
+                              stdscr.addstr(10,20,"This ID of course is not exists!")
+                      else:
+                          stdscr.addstr(10,20,"Wrong input, please try again from frist menu!")
+                    except ValueError:
+                         stdscr.addstr(5,5,"Something wrong, it's not work!")
+                         stdscr.refresh()
+                         stdscr.addstr(18,25,"Press any key to continue ...")
+                         stdscr.getch()
+                    stdscr.addstr(18,25,"Press any key to continue ...")
+                    stdscr.getch()
           elif choose == ord('8'):
                     op.print_mark_of_student(student,stdscr)
           elif choose == ord('9'):

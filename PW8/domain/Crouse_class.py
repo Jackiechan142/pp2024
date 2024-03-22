@@ -31,10 +31,7 @@ class Course:
                 for j in range(len(student)):
                     if(sid.gather() == student[j].id):
                         if fc.check_mark(student[j].id, self.markcour) == True:
-                           stdscr.addstr(10,25,"This Student have mark in this Course before, please choice other option.")
-                           stdscr.addstr(18,25,"Press any key to continue ...")
-                           stdscr.refresh()
-                           stdscr.getch()
+                           stdscr.addstr(10,2,"This Student have mark in this Course before, please choice other option.")
                            break
                         mark = Box.makebox(stdscr,"Mark",1,20,row +6,2)
                         stdscr.refresh()
@@ -113,7 +110,7 @@ class Course:
                               else:
                                     break
                          self.markcour[i].set_mark(fc.round_down(a))
-                         student[j].refe_point(a,self.id)
+                         student[j].refe_point(fc.round_down(a),self.id)
                          stdscr.addstr(10,2,"Fix mark for this Student is done.")
        stdscr.refresh()
        stdscr.addstr(18,25,"Press any key to continue ...")

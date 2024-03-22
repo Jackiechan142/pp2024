@@ -65,52 +65,7 @@ def zip_file():
            os.remove(f)
    print("Zip file created succesfully.")
 
-# function to remove data
-def remove1(stdscr,student,course):
-        stdscr.clear()
-        stdscr.addstr(1,2,"Student you want to remove")
-        q = Box.makebox(stdscr,"ID",1,20,2,2)
-        out = 0
-        for i in range(len(student)):
-            if (q.gather() == student[i].id):
-                  remove_student(student[i],course)
-                  write_mark(course)
-                  student = np.delete(student,i)
-                  write_file(student)
-                  break
-            else:
-                 out = out +1
-        if (out > len(student)):
-             stdscr.addstr(4,2,"This ID is not found.")
-             stdscr.addstr(18,25,"Press any key to continue ...")
-             stdscr.refresh()
-             stdscr.getch()
-        return student,course
-def remove2(stdscr,student,course):
-    stdscr.clear()
-    stdscr.addstr(1,2,"Course you want to remove")
-    stdscr.addstr(2,0,f"{'ID':<15}{'Name':<30}{'Credict':<15}")
-    stdscr.addstr(3,0,"-"*60)
-    row = 4
-    for i in range(len(course)):
-        stdscr.addstr(row,0,f"{course[i].id:<15}{course[i].name:<30}{course[i].credict:<15}")
-        row +=2
-    w = Box.makebox(stdscr,"ID",1,20,2,2)
-    ou = 0
-    for i in range(len(course)):
-        if (w.gather() == course[i].id):
-             remove_course(course[i],student)
-             course = np.delete(course,i)
-             print_file(course)
-             break
-        else:
-            ou = ou +1
-    if ou > len(course):
-         stdscr.addstr(4,2,"This ID is not found.")
-         stdscr.addstr(18,25,"Press any key to continue ...")
-         stdscr.refresh()
-         stdscr.getch()
-    return student,course
+
 
 # function to choice what you want to show: student or course?
 def show_choice(stdscr,student,course):
