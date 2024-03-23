@@ -121,3 +121,120 @@ def Fix_point(stdscr,course,student):
                     break
             if check_ID(idbox.gather(),student) == True:
                 course[i].fix_mark(stdscr,idbox.gather(),student)
+
+def fix_student(stdscr,student,course):
+    stdscr.clear()
+    stdscr.addstr(1,2,"1. Fix the Name of Student.")
+    stdscr.addstr(2,2,"2. Fix the Dob of Student.")
+    stdscr.refresh()
+    choice = stdscr.getch()
+    if choice == ord('1'):
+        stdscr.clear()
+        nameBox = Box.makebox(stdscr,"Name",1,20,2,2)
+        stdscr.refresh()
+        nameBox.edit()
+        while True:
+            if nameBox.gather().strip() =="":
+                stdscr.addstr(10,10,"Please fill in Name field!")
+                stdscr.refresh()
+                nameBox.edit()
+            else:
+                student.setName(nameBox.gather())
+                for i in range(len(course)):
+                    for j in range(len(course[i].markcour)):
+                         if student.id == course[i].markcour[j].id:
+                             course[i].markcour[j].setName(nameBox.gather())
+                             break
+                stdscr.addstr(10,10,"Name of Student was fix done!")
+                stdscr.refresh()
+                stdscr.addstr(18,25,"Press any key to continue ...")
+                stdscr.getch()
+                break
+    elif choice == ord('2'):
+        stdscr.clear()
+        DobBox = Box.makebox(stdscr,"Dob",1,20,2,2)
+        stdscr.refresh()
+        DobBox.edit()
+        while True:
+            if DobBox.gather().strip() =="":
+                stdscr.addstr(10,10,"Please fill in Dob field!")
+                stdscr.refresh()
+                DobBox.edit()
+            else:
+                student.setDob(DobBox.gather())
+                for i in range(len(course)):
+                    for j in range(len(course[i].markcour)):
+                         if student.id == course[i].markcour[j].id:
+                             course[i].markcour[j].setDob(DobBoxBox.gather())
+                             break
+                stdscr.addstr(10,10,"Dob of Student was fix done!")
+                stdscr.refresh()
+                stdscr.addstr(18,25,"Press any key to continue ...")
+                stdscr.getch()
+                break
+    else:
+        stdscr.addstr(8,2,"Wrong type of input in credict, please try again from menu.")
+        stdscr.refresh()
+        stdscr.getch()
+def fix_course(stdscr,course,student):
+    stdscr.clear()
+    stdscr.addstr(1,2,"1. Fix the Name of Course.")
+    stdscr.addstr(2,2,"2. Fix the credict of Course.")
+    stdscr.refresh()
+    choice = stdscr.getch()
+    if choice == ord('1'):
+        stdscr.clear()
+        nameBox = Box.makebox(stdscr,"Name",1,20,2,2)
+        stdscr.refresh()
+        nameBox.edit()
+        while True:
+            if nameBox.gather().strip() =="":
+                stdscr.addstr(10,10,"Please fill in Name field!")
+                stdscr.refresh()
+                nameBox.edit()
+            else:
+                course.setName(nameBox.gather())
+                for i in range(len(student)):
+                    for j in range(len(student[i].mark)):
+                        if course.id == student[i].mark[j].id:
+                            student[i].mark[j].setName(nameBox.gather())
+                            break
+                stdscr.addstr(10,10,"Name of Course was fix done!")
+                stdscr.refresh()
+                stdscr.addstr(18,25,"Press any key to continue ...")
+                stdscr.getch()
+                break
+    elif choice == ord('2'):
+        stdscr.clear()
+        creBox = Box.makebox(stdscr,"Credict",1,20,2,2)
+        stdscr.refresh()
+        creBox.edit()
+        t = True
+        while t:
+            if creBox.gather().strip() =="":
+                stdscr.addstr(10,10,"Please fill in Credict field!")
+                stdscr.refresh()
+                creBox.edit()
+            while creBox.gather().strip() != "":
+                try:
+                    c = int(creBox.gather())
+                    course.setCredict(c)
+                    for i in range(len(student)):
+                      for j in range(len(student[i].mark)):
+                        if course.id == student[i].mark[j].id:
+                            student[i].mark[j].setCredict(c)
+                            break
+                    stdscr.addstr(10,10,"Credict of Course was fix done!")
+                    t= False
+                    break
+                except ValueError:
+                    stdscr.addstr(10,10,"Wrong type of input in credict, please try again.")
+                    stdscr.refresh()
+                    creBox.edit()
+        stdscr.refresh()
+        stdscr.addstr(18,25,"Press any key to continue ...")
+        stdscr.getch()
+    else:
+        stdscr.addstr(8,2,"Wrong type of input in credict, please try again from menu.")
+        stdscr.refresh()
+        stdscr.getch()

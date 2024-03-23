@@ -84,7 +84,7 @@ def main(stdscr):
         stdscr.addstr("1. Add information of Student.\n")
         stdscr.addstr("2. Add information of Course.\n")
         stdscr.addstr("3. Show the information.\n")
-        stdscr.addstr("4. Fix mark.\n")
+        stdscr.addstr("4. Fix information.\n")
         stdscr.addstr("5. Add the mark in Course.\n")
         stdscr.addstr("6. Show mark of student in each Course.\n")
         stdscr.addstr("7. Delete data.\n")
@@ -103,8 +103,53 @@ def main(stdscr):
             course = ip.case_2(course,stdscr)
           elif choose == ord('3'):
               fc.show_choice(stdscr,student,course)
-          elif choose == ord('4'): 
-               fc.Fix_point(stdscr,course,student)
+          elif choose == ord('4'):
+             stdscr.clear()
+             stdscr.addstr(1,2,"1. Fix information of Student.")
+             stdscr.addstr(2,2,"2. Fix information of Course. ")
+             stdscr.addstr(3,2,"3. Fix max of student.")
+             stdscr.refresh()
+             nice = stdscr.getch()
+             if nice == ord('1'):
+                 stdscr.clear()
+                 idBox= Box.makebox(stdscr,"ID of student.",1,20,2,2)
+                 stdscr.refresh()
+                 idBox.edit()
+                 dem = 0
+                 for con in range(len(student)):
+                     if student[con].id == idBox.gather():
+                         fc.fix_student(stdscr,student[con],course)
+                     else:
+                         dem +=1
+                 if dem > len(student):
+                    stdscr.addstr(15,15,"This Id is not exists!")
+                    stdscr.refresh()
+                    stdscr.addstr(18,25,"Press any key to continue ...")
+                    stdscr.getch()
+             elif nice == ord('2'):
+                 stdscr.clear()
+                 CoBox= Box.makebox(stdscr,"ID of Course.",1,20,2,2)
+                 stdscr.refresh()
+                 CoBox.edit()
+                 dem1 = 0
+                 for ca in range(len(course)):
+                     if course[ca].id == CoBox.gather():
+                         fc.fix_course(stdscr,course[ca],student)
+                     else:
+                         dem1 +=1
+                 if dem1 > len(course):
+                    stdscr.addstr(15,15,"This Id is not exists!")
+                    stdscr.refresh()
+                    stdscr.addstr(18,25,"Press any key to continue ...")
+                    stdscr.getch()
+
+             elif nice == ord('3'):
+                 fc.Fix_point(stdscr,course,student)
+             else:
+                  stdscr.addstr(8,2,"Wrong type of input in credict, please try again from menu.")
+                  stdscr.refresh()
+                  stdscr.getch()
+
           elif choose == ord('5'):
                     while(len(course) == 0):
                          stdscr.addstr(1,10,"There no Course, please input data of course.")

@@ -11,6 +11,15 @@ class Course:
         self.markcour = np.array([])
     def __str__(self):
         return f" Id: {self.id} \n Name: {self.name} \n Credict: {self.credict} \n ================================================= \n"
+    def getName(self):
+        return self.name
+    def setName(self,name):
+        self.name = name
+    def getCredict(self):
+        return self.credict
+    def setCredict(self,credict):
+        self.credict = credict
+
     # input mark  of each student in this course.
     def mark(self,student,stdscr):
         stdscr.clear()
@@ -113,7 +122,7 @@ class Course:
                          student[j].refe_point(fc.round_down(a),self.id)
                          stdscr.addstr(10,2,"Fix mark for this Student is done.")
        stdscr.refresh()
-       stdscr.addstr(18,25,"Press any key to continue ...")
+       stdscr.addstr(18,25,"Press any key to continue ..........")
        stdscr.getch()
 
 # create a child class of class Course
@@ -121,6 +130,10 @@ class mark_of_student(Course):
     def __init__(self, id, name,credict,point):
         super().__init__(id, name, credict)
         self.point = point
+    def setName(self,name):
+        self.name = name
+    def setCredict(self,credict):
+        self.credict = credict
     def __str__(self):
         return f" ID of course: {self.id} \t Name of course: {self.name} \t Credict: {self.credict} \t Mark: {self.point}"
     def set_point(self, point):

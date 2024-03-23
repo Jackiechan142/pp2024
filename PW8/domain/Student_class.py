@@ -8,6 +8,14 @@ class Student:
          self.name = name
          self.Dob= Dob
          self.mark = np.array([])
+    def getName(self):
+        return self.name
+    def setName(self,name):
+        self.name = name
+    def getDob(self):
+        return self.Dob
+    def setDob(self,Dob):
+        self.Dob = Dob
     def __str__(self):
         return f" ID: {self.id} \n Name: {self.name} \n Dob: {self.Dob} \n ====================== \n "
     # input mark of each course to Student, form list.
@@ -50,6 +58,10 @@ class mark_in_course(Student):
     def __init__(self, id, name, Dob, mark):
         super().__init__(id, name, Dob)
         self.mark = mark
+    def setName(self,name):
+        self.name = name
+    def setDob(self,Dob):
+        self.Dob = Dob
     def __str__(self):
         return f"ID: {self.id} \t Name: {self.name} \t Mark: {self.mark}"
     def get_mark(self):
